@@ -1,14 +1,19 @@
 package com.projetosite.course.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table (name = "tb_user")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L; //número de série padrão do serializable
 	
@@ -19,6 +24,10 @@ public class User implements Serializable {
 	private String email;
 	private String phone;
 	private String password;
+	
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<>(); 
+	//coleção só se coloca o get, pois ela nunca será alterada
 	
 	public User() {
 	}
@@ -72,6 +81,11 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -88,7 +102,7 @@ public class User implements Serializable {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
 	
 	
 }
