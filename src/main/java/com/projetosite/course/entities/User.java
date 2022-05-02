@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table (name = "tb_user")
 public class User implements Serializable {
@@ -25,9 +27,9 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 	
+	@JsonIgnore //evita um loop devido a uma associação de mão dupla entre pedido e usuário
 	@OneToMany(mappedBy = "client")
-	private List<Order> orders = new ArrayList<>(); 
-	//coleção só se coloca o get, pois ela nunca será alterada
+	private List<Order> orders = new ArrayList<>(); //coleção só se coloca o get, pois ela nunca será alterada
 	
 	public User() {
 	}
