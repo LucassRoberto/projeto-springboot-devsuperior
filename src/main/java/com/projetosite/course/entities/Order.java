@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,7 +41,7 @@ public class Order implements Serializable {
 	@OneToMany(mappedBy = "id.order") //no OrderItem se tem o id, que por sua vez tem o Order
 	private Set<OrderItem> items = new HashSet<>();
 	
-	@OneToOne (mappedBy = "order")
+	@OneToOne (mappedBy = "order", cascade = CascadeType.ALL) //mapear as entidades para que ambas tenham o mesmo id
 	private Payment payment;
 	
 	public Order() {
@@ -99,6 +100,14 @@ public class Order implements Serializable {
 	
 	public Set<OrderItem> getItems(){
 		return items;
+	}
+	
+	public Double getTotal() { // calcular a soma de todos os itens do pedido
+		double sum = 0.0;
+		for (OrderItem x : items) {
+			sum += x.getSubtotal();
+		}
+		return sum;
 	}
 
 	@Override
