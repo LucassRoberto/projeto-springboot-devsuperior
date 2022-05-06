@@ -3,6 +3,8 @@ package com.projetosite.course.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -33,7 +35,7 @@ public class UserService {
 		return repository.save (obj);
 	}
 	
-	public void delete (Long id) {
+	public void delete (Long id) {  //exception delete
 		try {
 			repository.deleteById(id);
 		} catch(EmptyResultDataAccessException e) {
@@ -45,9 +47,14 @@ public class UserService {
 	
 	//atualizar usuário
 	public User update (Long id, User obj) {
-		User entity = repository.getById(id);
-		updateData(entity, obj);
-		return repository.save(entity);
+		try {
+			User entity = repository.getById(id);
+			updateData(entity, obj);
+			return repository.save(entity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
+		
 		
 	}
 
